@@ -1,110 +1,171 @@
 
+# The Assembly's Voter Guide Results Plugin
 
+The original version of this results modal was created for the 2026 primaries and was built with React + Typescript. It was deployed to a Cloudflare Workers page and embedded as an iframe into the Wordpress post. This version was scaffolded by @dylan-cancelliere. Thanks Dylan!
 
-/*
+Here is what we would put in a shortcode block for each race result. The page number and race ID ("lid", as it is referred to in the code) would be appended to the URL. 
 
-GIT BASICS
-
-- view your branches with `git branch`
-- make a new branch with `git checkout -b new-branch-name`
-- swith to an existing branch with `git checkout branch-name`
-- Add all of your changes by navigating to the root directory of your project in the terminal
-  and then enter `git add .`
-- enter `git commit -m "My commit messge here"` to commit your changes and log a brief description
-- publish your changes to github with `git push`
-  - the first time you push a commit on a new branch you will have to type `git push -u origin branch-name`
-
-Some advanced tips
-- `git stash` temporarily saves your changes since your last commit and reverts to the old version. you can
-  you can re-load them with `git stash pop`
-- `git restore file-path` irrevocably reverts the changes you have made since the last commit for the file path specified
-  - for example, I could `git restore my-file.txt` to target a specific file, or `git restore src/` to target a folder
-- `git diff .` will show you the changes since your last commit. You can also specify a file path instead of the .
-
-Creating a new git project:
-- option 1: create the folder first in github and then follow the steps provided
-- option 2: in an existing project directory:
-  - enter `git init`
-  - make a commit: `git add . && git commit -m "initial commit"` or whatever you would like to commit
-  - in github, make a project with the same name as your project directory (ie results-modal)
-  - connect to github: `git remote add origin https://github.com/gracemcmc/project-name.git && git push -u origin main`
-
-
-*/
-
-
-
-
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+ <iframe 
+width="100%"
+height="450px"
+frameborder="0" border="0" 
+scrolling="no"
+src="https://results-modal.pages.dev/election-table/4_1942"></iframe> 
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The Assembly Network's sites had issues loading that many iframes at once. @jasonmurtha came up with a solution to this using vanilla Javascript as opposed to React + Typescript. Thanks Jason! 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This version functions by adding a Javascript block to the page. Now, this is what we'll put in a shortcode block:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+` <div class="ta-results" data-page="4" data-lid="1942"></div> `
+
+# The Races
+
+The following needs to be updated for the 2026 general election. 
+
+Guilford	Wake	Durham	Cumberland	State
+0	1	2	3	4
+Bladen	Columbus	Robeson	Scotland	Orange
+5	6	7	8	9
+
+| Race | Race LID |
+| ----------- | ----------- |
+| US SENATE - DEM (VOTE FOR 1) | 2147 |
+| US SENATE - REP (VOTE FOR 1) | 2149 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 05 - DEM (VOTE FOR 1) | 2117 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 05 - REP (VOTE FOR 1) | 2119 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 06 - DEM (VOTE FOR 1) | 2120 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 09 - DEM (VOTE FOR 1) | 2129 |
+| NC COURT OF APPEALS JUDGE SEAT 01 - REP (VOTE FOR 1) | 1120 |
+| NC COURT OF APPEALS JUDGE SEAT 03 - DEM (VOTE FOR 1) | 1124 |
+| NC STATE SENATE DISTRICT 26 - REP (VOTE FOR 1) | 1942 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 059 - DEM (VOTE FOR 1) | 1679 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 060 - DEM (VOTE FOR 1) | 1682 |
+| GUILFORD COUNTY BOARD OF COMMISSIONERS AT-LARGE - DEM (VOTE FOR 1) | 1 |
+| GUILFORD COUNTY BOARD OF COMMISSIONERS DISTRICT 07 - DEM (VOTE FOR 1) | 13 |
+| GUILFORD COUNTY BOARD OF EDUCATION DISTRICT 04 - DEM (VOTE FOR 1) | 22 |
+| GUILFORD COUNTY BOARD OF EDUCATION DISTRICT 06 - DEM (VOTE FOR 1) | 25 |
+| GUILFORD COUNTY CLERK OF SUPERIOR COURT - DEM (VOTE FOR 1) | 31 |
+| GUILFORD COUNTY SHERIFF - REP (VOTE FOR 1) | 36 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 04 - DEM (VOTE FOR 1) | 2114 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 13 - DEM (VOTE FOR 1) | 2141 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 13 - REP (VOTE FOR 1) | 2143 |
+| NC STATE SENATE DISTRICT 17 - REP (VOTE FOR 1) | 1915 |
+| NC STATE SENATE DISTRICT 18 - REP (VOTE FOR 1) | 1918 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 035 - REP (VOTE FOR 1) | 1609 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 037 - DEM (VOTE FOR 1) | 1613 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 038 - DEM (VOTE FOR 1) | 1616 |
+| NC DISTRICT COURT JUDGE DISTRICT 10A SEAT 01 - REP (VOTE FOR 1) | 1186 |
+| DISTRICT ATTORNEY DISTRICT 10 - DEM (VOTE FOR 1) | 1028 |
+| CITY OF RALEIGH CITY COUNCIL AT-LARGE (VOTE FOR 2) | 920023 |
+| CITY OF RALEIGH CITY COUNCIL DISTRICT C (VOTE FOR 1) | 26 |
+| NC STATE SENATE DISTRICT 22 - DEM (VOTE FOR 1) | 1928 |
+| NC SUPERIOR COURT JUDGE DISTRICT 16B SEAT 02 - DEM (VOTE FOR 1) | 2048 |
+| NC DISTRICT COURT JUDGE DISTRICT 16 SEAT 02 - DEM (VOTE FOR 1) | 1253 |
+| NC DISTRICT COURT JUDGE DISTRICT 16 SEAT 05 - DEM (VOTE FOR 1) | 1262 |
+| DISTRICT ATTORNEY DISTRICT 16 - DEM (VOTE FOR 1) | 1043 |
+| DURHAM COUNTY SHERIFF - DEM (VOTE FOR 1) | 4 |
+| DURHAM COUNTY BOARD OF EDUCATION DISTRICT 01 (VOTE FOR 1) | 7 |
+| DURHAM COUNTY BOARD OF EDUCATION DISTRICT 02 (VOTE FOR 1) | 8 |
+| DURHAM COUNTY BOARD OF EDUCATION DISTRICT 03 (VOTE FOR 1) | 9 |
+| DURHAM COUNTY BOARD OF EDUCATION DISTRICT 04 (VOTE FOR 1) | 10 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 07 - REP (VOTE FOR 1) | 2125 |
+| NC STATE SENATE DISTRICT 21 - REP (VOTE FOR 1) | 1927 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 043 - DEM (VOTE FOR 1) | 1631 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 043 - REP (VOTE FOR 1) | 1633 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 045 - DEM (VOTE FOR 1) | 1637 |
+| NC DISTRICT COURT JUDGE DISTRICT 14 SEAT 03 - DEM (VOTE FOR 1) | 1226 |
+| NC DISTRICT COURT JUDGE DISTRICT 14 SEAT 05 - DEM (VOTE FOR 1) | 1232 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 01 - REP (VOTE FOR 1) | 2107 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 03 - DEM (VOTE FOR 1) | 2111 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 08 - DEM (VOTE FOR 1) | 2126 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 10 - DEM (VOTE FOR 1) | 2132 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 10 - REP (VOTE FOR 1) | 2134 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 11 - DEM (VOTE FOR 1) | 2135 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 11 - REP (VOTE FOR 1) | 2137 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 12 - DEM (VOTE FOR 1) | 2138 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 12 - REP (VOTE FOR 1) | 2140 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 14 - DEM (VOTE FOR 1) | 2144 |
+| US HOUSE OF REPRESENTATIVES DISTRICT 14 - REP (VOTE FOR 1) | 2146 |
+| NC STATE SENATE DISTRICT 01 - REP (VOTE FOR 1) | 1867 |
+| NC STATE SENATE DISTRICT 05 - REP (VOTE FOR 1) | 1879 |
+| NC STATE SENATE DISTRICT 09 - REP (VOTE FOR 1) | 1891 |
+| NC STATE SENATE DISTRICT 10 - REP (VOTE FOR 1) | 1894 |
+| NC STATE SENATE DISTRICT 12 - DEM (VOTE FOR 1) | 1898 |
+| NC STATE SENATE DISTRICT 12 - REP (VOTE FOR 1) | 1900 |
+| NC STATE SENATE DISTRICT 30 - REP (VOTE FOR 1) | 1954 |
+| NC STATE SENATE DISTRICT 32 - DEM (VOTE FOR 1) | 1958 |
+| NC STATE SENATE DISTRICT 34 - REP (VOTE FOR 1) | 1966 |
+| NC STATE SENATE DISTRICT 37 - DEM (VOTE FOR 1) | 1973 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 001 - REP (VOTE FOR 1) | 1507 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 004 - REP (VOTE FOR 1) | 1516 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 006 - DEM (VOTE FOR 1) | 1520 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 006 - REP (VOTE FOR 1) | 1522 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 009 - DEM (VOTE FOR 1) | 1529 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 016 - REP (VOTE FOR 1) | 1552 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 017 - REP (VOTE FOR 1) | 1555 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 022 - REP (VOTE FOR 1) | 1570 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 023 - DEM (VOTE FOR 1) | 1571 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 025 - DEM (VOTE FOR 1) | 1577 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 026 - REP (VOTE FOR 1) | 1582 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 027 - DEM (VOTE FOR 1) | 1583 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 028 - REP (VOTE FOR 1) | 1588 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 032 - DEM (VOTE FOR 1) | 1598 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 032 - REP (VOTE FOR 1) | 1600 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 048 - REP (VOTE FOR 1) | 1648 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 050 - DEM (VOTE FOR 1) | 1652 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 051 - REP (VOTE FOR 1) | 1657 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 055 - REP (VOTE FOR 1) | 1669 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 065 - REP (VOTE FOR 1) | 1699 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 067 - DEM (VOTE FOR 1) | 1703 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 073 - DEM (VOTE FOR 1) | 1721 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 078 - REP (VOTE FOR 1) | 1738 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 079 - REP (VOTE FOR 1) | 1741 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 080 - REP (VOTE FOR 1) | 1744 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 081 - REP (VOTE FOR 1) | 1747 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 089 - REP (VOTE FOR 1) | 1771 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 090 - REP (VOTE FOR 1) | 1774 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 095 - REP (VOTE FOR 1) | 1789 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 099 - DEM (VOTE FOR 1) | 1799 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 105 - REP (VOTE FOR 1) | 1819 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 106 - DEM (VOTE FOR 1) | 1820 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 110 - REP (VOTE FOR 1) | 1834 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 113 - REP (VOTE FOR 1) | 1843 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 117 - REP (VOTE FOR 1) | 1855 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 118 - REP (VOTE FOR 1) | 1858 |
+| NC HOUSE OF REPRESENTATIVES DISTRICT 119 - REP (VOTE FOR 1) | 1861 |
+| NC SUPERIOR COURT JUDGE DISTRICT 26C SEAT 01 - DEM (VOTE FOR 1) | 2072 |
+| NC SUPERIOR COURT JUDGE DISTRICT 36 SEAT 01 - REP (VOTE FOR 1) | 2089 |
+| NC DISTRICT COURT JUDGE DISTRICT 02 SEAT 02 - REP (VOTE FOR 1) | 1144 |
+| NC DISTRICT COURT JUDGE DISTRICT 26 SEAT 18 - DEM (VOTE FOR 1) | 1340 |
+| NC DISTRICT COURT JUDGE DISTRICT 29 SEAT 01 - REP (VOTE FOR 1) | 1375 |
+| NC DISTRICT COURT JUDGE DISTRICT 29 SEAT 02 - REP (VOTE FOR 1) | 1378 |
+| NC DISTRICT COURT JUDGE DISTRICT 31 SEAT 04 - DEM (VOTE FOR 1) | 1391 |
+| NC DISTRICT COURT JUDGE DISTRICT 32 SEAT 06 (UNEXPIRED) - REP (VOTE FOR 1) | 1399 |
+| NC DISTRICT COURT JUDGE DISTRICT 33 SEAT 04 - REP (VOTE FOR 1) | 1411 |
+| NC DISTRICT COURT JUDGE DISTRICT 34 SEAT 02 - REP (VOTE FOR 1) | 1423 |
+| NC DISTRICT COURT JUDGE DISTRICT 35 SEAT 01 - REP (VOTE FOR 1) | 1429 |
+| NC DISTRICT COURT JUDGE DISTRICT 36 SEAT 05 - REP (VOTE FOR 1) | 1444 |
+| NC DISTRICT COURT JUDGE DISTRICT 37 SEAT 04 - REP (VOTE FOR 1) | 1459 |
+| NC DISTRICT COURT JUDGE DISTRICT 40 SEAT 03 - DEM (VOTE FOR 1) | 1475 |
+| NC DISTRICT COURT JUDGE DISTRICT 41 SEAT 01 - REP (VOTE FOR 1) | 1486 |
+| DISTRICT ATTORNEY DISTRICT 09 - REP (VOTE FOR 1) | 1027 |
+| DISTRICT ATTORNEY DISTRICT 15 - REP (VOTE FOR 1) | 1042 |
+| DISTRICT ATTORNEY DISTRICT 19 - REP (VOTE FOR 1) | 1054 |
+| DISTRICT ATTORNEY DISTRICT 21 - DEM (VOTE FOR 1) | 1058 |
+| DISTRICT ATTORNEY DISTRICT 36 - REP (VOTE FOR 1) | 1099 |
+| DISTRICT ATTORNEY DISTRICT 40 - DEM (VOTE FOR 1) | 1106 |
+| DISTRICT ATTORNEY DISTRICT 41 - REP (VOTE FOR 1) | 1111 |
+| KANNAPOLIS CITY SCHOOLS BOARD OF EDUCATION AREA I (VOTE FOR 2) | 130014 |
+| BLADEN COUNTY BOARD OF EDUCATION DISTRICT 02 - REP (VOTE FOR 1) | 18 |
+| BLADEN COUNTY SHERIFF - DEM (VOTE FOR 1) | 28 |
+| BLADEN COUNTY SHERIFF - REP (VOTE FOR 1) | 30 |
+| COLUMBUS COUNTY BOARD OF COMMISSIONERS DISTRICT 06 - REP (VOTE FOR 1) | 6 |
+| COLUMBUS COUNTY SHERIFF - REP (VOTE FOR 1) | 15 |
+| ROBESON COUNTY BOARD OF COMMISSIONERS DISTRICT 08 - REP (VOTE FOR 1) | 12 |
+| ROBESON COUNTY BOARD OF EDUCATION DISTRICT 02 (VOTE FOR 1) | 19 |
+| ROBESON COUNTY BOARD OF EDUCATION DISTRICT 03 (VOTE FOR 1) | 20 |
+| ROBESON COUNTY BOARD OF EDUCATION DISTRICT 06 (VOTE FOR 1) | 21 |
+| SCOTLAND COUNTY BOARD OF COMMISSIONERS SPRING HILL TWP - REP (VOTE FOR 1) | 3 |
+| ORANGE COUNTY SHERIFF - DEM (VOTE FOR 1) | 16 |
