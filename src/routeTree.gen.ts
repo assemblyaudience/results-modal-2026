@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as IdRouteImport } from './routes/$id'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ElectionTableIndexRouteImport } from './routes/election-table/index'
 import { Route as ElectionTableIdRouteImport } from './routes/election-table/$id'
@@ -17,6 +18,11 @@ import { Route as ElectionTableIdRouteImport } from './routes/election-table/$id
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdRoute = IdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const ElectionTableIdRoute = ElectionTableIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$id': typeof IdRoute
   '/about': typeof AboutRoute
   '/election-table/$id': typeof ElectionTableIdRoute
   '/election-table/': typeof ElectionTableIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$id': typeof IdRoute
   '/about': typeof AboutRoute
   '/election-table/$id': typeof ElectionTableIdRoute
   '/election-table': typeof ElectionTableIndexRoute
@@ -50,20 +58,33 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$id': typeof IdRoute
   '/about': typeof AboutRoute
   '/election-table/$id': typeof ElectionTableIdRoute
   '/election-table/': typeof ElectionTableIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/election-table/$id' | '/election-table/'
+  fullPaths:
+    | '/'
+    | '/$id'
+    | '/about'
+    | '/election-table/$id'
+    | '/election-table/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/election-table/$id' | '/election-table'
-  id: '__root__' | '/' | '/about' | '/election-table/$id' | '/election-table/'
+  to: '/' | '/$id' | '/about' | '/election-table/$id' | '/election-table'
+  id:
+    | '__root__'
+    | '/'
+    | '/$id'
+    | '/about'
+    | '/election-table/$id'
+    | '/election-table/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IdRoute: typeof IdRoute
   AboutRoute: typeof AboutRoute
   ElectionTableIdRoute: typeof ElectionTableIdRoute
   ElectionTableIndexRoute: typeof ElectionTableIndexRoute
@@ -76,6 +97,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$id': {
+      id: '/$id'
+      path: '/$id'
+      fullPath: '/$id'
+      preLoaderRoute: typeof IdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,6 +132,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IdRoute: IdRoute,
   AboutRoute: AboutRoute,
   ElectionTableIdRoute: ElectionTableIdRoute,
   ElectionTableIndexRoute: ElectionTableIndexRoute,

@@ -19,10 +19,6 @@ const urls_by_locale = [
   {outlet: "orange", url: "https://er.ncsbe.gov/enr/20260303/data/results_68.txt?v=22-15-12"},
 ]
 
-//https://er.ncsbe.gov/enr/20260303/data/results_0.txt?v=22-15-12
-
-//https://fpfn4rqbhwnzwe5k2q7tsyy7ga0nbrfb.lambda-url.us-east-2.on.aws/
-
 function RouteComponent() {
   const params = Route.useParams();
   let input_props = ["0", "2117"];

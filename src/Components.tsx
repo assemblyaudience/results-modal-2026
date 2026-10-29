@@ -1,10 +1,9 @@
 import { Table, Button } from "@mantine/core";
-import { GetResultsNCSBE, results_parser, set_list_of_races } from './functions.ts';
+import { GetResultsNCSBE, results_parser, set_list_of_races, extremely_long_string } from './functions.ts';
 import { useState, useEffect } from 'react';
 import races from './list_of_races.json';
 import endpoint from './url_protector.json';
 
-//export function ResultsTable(props: {input_props: string[]}) {}
 
 export function ResultsTable(props: {input_props:string[]}) {
 
@@ -92,4 +91,24 @@ export function OptionsTable() {
           <td>{options.lid}</td>
       </tr>)}</tbody>
     </table>);
+}
+
+export function WPSimple({ input_props }: { input_props: string }) {
+  const input_url = endpoint.EP;
+  const [options_dict, setOptionsDict] = useState<Option[] | unknown[]>([]);
+  const page = input_props;
+
+  type Option = { cnm: string; lid: string };
+
+  useEffect(() => {
+    set_list_of_races(input_url)
+    .then(setOptionsDict)
+  }, [input_url]);
+
+  let full_string = extremely_long_string(page, options_dict);
+
+  return (    
+    <div>
+      {full_string}
+    </div>);
 }

@@ -16,6 +16,7 @@
 
 export async function set_list_of_races(url: string) {
   const response = await GetResultsNCSBE(url);
+  //change page number to County ID? 
   const new_array = [];
   for (let i = 0; i < response.length; i++) {
     for (let j = 0; j < response[i].length; j++) {
@@ -30,7 +31,6 @@ export async function set_list_of_races(url: string) {
         new_array.push(new_dictionary);}
     }
     const filtered_array = get_duplicates(new_array);
-    console.log(filtered_array[3]);
     return filtered_array;
 
 }
@@ -92,4 +92,14 @@ export function results_parser(results_table: {[key:string]: string}[]) {
         new_array.push(new_dictionary);
       }
 	return new_array;
+}
+
+export function extremely_long_string(page: String, races: any[]) {
+  const filtered_by_locale = races.filter((entry) => (entry.page == page));
+  let full_code = new String();
+  for (let i = 0; i < filtered_by_locale.length; i++) {
+    let each_race = ` <div class="ta-results" data-page="${page}" data-lid="${filtered_by_locale[i].lid}"></div>\n\n`;
+    full_code = full_code + each_race;
+  }
+  return full_code;
 }
