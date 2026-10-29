@@ -26,3 +26,6 @@ dist-ssr
 # Related to the Cloudflare Wrangler/Vite plugin
 .wrangler
 .dev.vars*
+
+#Hide AWS endpoint
+./src/url_protector.json

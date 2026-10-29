@@ -47,11 +47,11 @@ export function App() {
         </div>
         <table>
           <tr>
-            <td>Guilford</td>
+            <td>State</td>
             <td>Wake</td>
             <td>Durham</td>
             <td>Cumberland</td>
-            <td>State</td>
+            <td>Guilford</td>
           </tr>
           <tr>
             <td>0</td>
@@ -80,4 +80,3 @@ export function App() {
     )
 }
 //{JSON.stringify(races)}
-// export is like public in java

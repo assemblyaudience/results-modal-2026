@@ -24,10 +24,10 @@ This version functions by adding a Javascript block to the page. Now, this is wh
 
 The following needs to be updated for the 2026 general election. 
 
-Guilford	Wake	Durham	Cumberland	State
-0	1	2	3	4
-Bladen	Columbus	Robeson	Scotland	Orange
-5	6	7	8	9
+| Guilford | Wake | Durham | Cumberland | State |
+| 0 | 1 | 2 | 3 | 4 |
+| Bladen | Columbus | Robeson | Scotland | Orange |
+| 5 | 6 | 7 | 8 | 9 | 
 
 | Race | Race LID |
 | ----------- | ----------- |

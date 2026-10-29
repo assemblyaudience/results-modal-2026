@@ -1,8 +1,8 @@
 import { Table, Button } from "@mantine/core";
-import { GetResultsNCSBE, results_parser } from './functions.ts';
+import { GetResultsNCSBE, results_parser, set_list_of_races } from './functions.ts';
 import { useState, useEffect } from 'react';
 import races from './list_of_races.json';
-
+import endpoint from './url_protector.json';
 
 //export function ResultsTable(props: {input_props: string[]}) {}
 
@@ -10,7 +10,7 @@ export function ResultsTable(props: {input_props:string[]}) {
 
 
   const [results_table, setResults_Table] = useState<unknown[] | undefined>([]);
-  const input_url = "https://fpfn4rqbhwnzwe5k2q7tsyy7ga0nbrfb.lambda-url.us-east-2.on.aws/";
+  const input_url = endpoint.EP;
 
   const page = props.input_props[0]
   const race_lid = props.input_props[1]
@@ -54,17 +54,27 @@ export function ResultsTable(props: {input_props:string[]}) {
 
 
 export function OptionsTable() {
-  const options_dict = [];
+  const input_url = endpoint.EP;
+  const [options_dict, setOptionsDict] = useState<Option[] | unknown[]>([]);
+  //const options_dict = [];
+  //const options_dict = await set_list_of_races(input_url);
+  type Option = { race: string; lid: string };
 
-  for (const key in races) {
-    const value = (races as any)[key];
-    options_dict.push(
-        <tr>
+  useEffect(() => {
+    set_list_of_races(input_url)
+    .then(setOptionsDict)
+  }, [input_url]);
+
+  const display_table = [];
+
+  for (const key in options_dict) {
+    const value = (options_dict as any)[key];
+    display_table.push(
+      <tr>
           <td>{key}</td>
           <td>{value}</td>
-        </tr>
-      );
-  }
+      </tr>
+      ); }
 
   /*json.races.forEach(({ key, val }) =>
     key in options_dict ? options_dict[key].push(val) : options_dict[key] = [val] );*/
@@ -76,6 +86,10 @@ export function OptionsTable() {
           <th>Race LID</th>
         </tr>
       </thead>
-      <tbody>{options_dict}</tbody>
+      <tbody>{options_dict?.map((options: any) =>
+      <tr key={options.lid}>
+          <td>{options.race}</td>
+          <td>{options.lid}</td>
+      </tr>)}</tbody>
     </table>);
 }

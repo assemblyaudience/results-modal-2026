@@ -14,6 +14,25 @@
   vwp: string;
 };
 
+export async function set_list_of_races(url: string) {
+  const response = await GetResultsNCSBE(url);
+  console.log(response[4][4]);
+  const new_array = [];
+  for (let i = 0; i < response.length; i++) {
+    for (let j = 0; j < response[i].length; j++) {
+      let new_dictionary = {
+          race: "",
+          lid: "",
+                }
+        new_dictionary.race = response[i][j].cnm;
+        new_dictionary.lid =response[i][j].lid;
+        new_array.push(new_dictionary);}
+    }
+    const filtered_array = eatDelete(new_array);
+    return new_array;
+
+}
+
 function get_duplicates(arr_of_dicts: any) {
   let election_options = [''];
   let duplicates = [''];
@@ -48,7 +67,6 @@ function eatDelete(results_table: {[key:string]: string}[]) {
   const proper = results_table.filter((entry) => 
     (entry.cid == "0") || !((get_duplicates(results_table)).includes(entry.cnm)));
 // something here in the filtering is not working but I don't know what. The cid filter is fine
-  console.log(proper);
   return proper;
 }
 
