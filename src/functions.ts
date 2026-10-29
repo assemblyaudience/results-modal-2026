@@ -16,36 +16,38 @@
 
 export async function set_list_of_races(url: string) {
   const response = await GetResultsNCSBE(url);
-  console.log(response[4][4]);
   const new_array = [];
   for (let i = 0; i < response.length; i++) {
     for (let j = 0; j < response[i].length; j++) {
       let new_dictionary = {
-          race: "",
+          page: i,
+          cnm: "",
           lid: "",
                 }
-        new_dictionary.race = response[i][j].cnm;
+
+        new_dictionary.cnm = response[i][j].cnm;
         new_dictionary.lid =response[i][j].lid;
         new_array.push(new_dictionary);}
     }
-    const filtered_array = eatDelete(new_array);
-    return new_array;
+    const filtered_array = get_duplicates(new_array);
+    console.log(filtered_array[3]);
+    return filtered_array;
 
 }
 
-function get_duplicates(arr_of_dicts: any) {
-  let election_options = [''];
-  let duplicates = [''];
+function get_duplicates(arr_of_dicts: any[]) {
+  const election_options = new Array();
+  const deduped = new Array();
+  console.log(arr_of_dicts[3]);
   for (var i = 0; i < arr_of_dicts.length; i++) {
     //cnm is the unique race name
-    var candidate = arr_of_dicts[i].bnm;
-    if (!(election_options.includes(candidate))) {
-      election_options.push(candidate);
+    var race = arr_of_dicts[i].lid;
+    if (!(election_options.includes(race))) {
+      deduped.push(arr_of_dicts[i]);
+      election_options.push(race);
     }
-    else if (!(duplicates.includes(candidate)))
-      {duplicates.push(candidate);}
   }
-  return duplicates;
+  return deduped;
 }
 
 export async function GetResultsNCSBE(url: string) {

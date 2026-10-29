@@ -58,7 +58,7 @@ export function OptionsTable() {
   const [options_dict, setOptionsDict] = useState<Option[] | unknown[]>([]);
   //const options_dict = [];
   //const options_dict = await set_list_of_races(input_url);
-  type Option = { race: string; lid: string };
+  type Option = { cnm: string; lid: string };
 
   useEffect(() => {
     set_list_of_races(input_url)
@@ -88,7 +88,7 @@ export function OptionsTable() {
       </thead>
       <tbody>{options_dict?.map((options: any) =>
       <tr key={options.lid}>
-          <td>{options.race}</td>
+          <td>{options.cnm}</td>
           <td>{options.lid}</td>
       </tr>)}</tbody>
     </table>);
