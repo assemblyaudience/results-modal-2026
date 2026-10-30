@@ -26,6 +26,7 @@
       votes: row.vct,
       percent: `${(parseFloat(row.pct) * 100).toFixed(2)}%`,
       lid: row.lid,
+      cnm: row.cnm,
     }));
   }
 
@@ -49,8 +50,17 @@
         `,
       )
       .join("");
+    
+      const tableTitle = rows
+      .map(
+        (row) => `
+          <h3>${row.cnm}<h3>
+        `,
+      )
+      .join("");
 
     target.innerHTML = `
+      <span>${tableTitle}</span>
       <hr class="ta-results-rule" aria-hidden="true">
       <table class="ta-results-table">
         <thead>

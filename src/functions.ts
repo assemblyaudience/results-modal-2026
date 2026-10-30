@@ -14,6 +14,8 @@
   vwp: string;
 };
 
+// TODO: create new type for the set_list_of_races function
+
 export async function set_list_of_races(url: string) {
   const response = await GetResultsNCSBE(url);
   //change page number to County ID? 
@@ -24,10 +26,12 @@ export async function set_list_of_races(url: string) {
           page: i,
           cnm: "",
           lid: "",
+          ogl: "",
                 }
 
         new_dictionary.cnm = response[i][j].cnm;
         new_dictionary.lid =response[i][j].lid;
+        new_dictionary.ogl = response[i][j].ogl;
         new_array.push(new_dictionary);}
     }
     const filtered_array = get_duplicates(new_array);
@@ -35,18 +39,38 @@ export async function set_list_of_races(url: string) {
 
 }
 
-function get_duplicates(arr_of_dicts: any[]) {
-  const election_options = new Array();
+function get_duplicates(input: any[]) {
+  // The bifurcation between statewide and local elections accounts for the fact
+  // that we want to grab some of the local elections from the statewide page
+  // because they cross counties. But, we still want
+  // them to show up on the local page. 
+  const election_options_statewide = new Array();
+  const election_options_locals = new Array();
   const deduped = new Array();
-  console.log(arr_of_dicts[3]);
-  for (var i = 0; i < arr_of_dicts.length; i++) {
-    //cnm is the unique race name
-    var race = arr_of_dicts[i].lid;
-    if (!(election_options.includes(race))) {
-      deduped.push(arr_of_dicts[i]);
-      election_options.push(race);
+
+  //ogl is the level of the election 
+  const static_ogls = ["fed", "nch", "ncs", "jud"]
+
+  
+  for (var i = 0; i < input.length; i++) {
+     if (!(input[i].page == 0) && (election_options_statewide.includes(input[i].lid)) && !(static_ogls.includes(input[i].ogl)))  {
+      const x = deduped.findIndex((j) => j.lid === input[i].lid);
+      deduped[x].page = input[i].page;
     }
+    else if ((input[i].page == 0) && !(election_options_statewide.includes(input[i].lid))) {
+      console.log("got to this step");
+      election_options_statewide.push(input[i].lid);
+      deduped.push(input[i]);
+    }
+    else if (!(input[i].page == 0) && !((election_options_statewide.includes(input[i].lid)) || (election_options_locals.includes(input[i].lid)))) {
+      election_options_locals.push(input[i].lid);
+      deduped.push(input[i]);
+    }
+    else { continue; }
   }
+  console.log(input.length);
+  console.log(election_options_statewide.length);
+  console.log(election_options_locals.length);
   return deduped;
 }
 
