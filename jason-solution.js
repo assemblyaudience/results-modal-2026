@@ -30,7 +30,7 @@
     }));
   }
 
-  function renderTable(target, rows) {
+  function renderTable(target, rows, title) {
     if (!rows.length) {
       target.innerHTML = `
         <hr class="ta-results-rule" aria-hidden="true">
@@ -51,16 +51,9 @@
       )
       .join("");
     
-      const tableTitle = rows
-      .map(
-        (row) => `
-          <h3>${row.cnm}<h3>
-        `,
-      )
-      .join("");
 
     target.innerHTML = `
-      <span>${tableTitle}</span>
+      <h3>${title}</h3>
       <hr class="ta-results-rule" aria-hidden="true">
       <table class="ta-results-table">
         <thead>
@@ -211,8 +204,9 @@
         const lid = target.dataset.lid;
         const pageResults = results[page] || [];
         const rows = parseRaceRows(pageResults).filter((row) => row.lid === lid);
+        const title = rows[0].cnm;
 
-        renderTable(target, rows);
+        renderTable(target, rows, title);
       }
     } catch (error) {
       for (const target of targets) {
