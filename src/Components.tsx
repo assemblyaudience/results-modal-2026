@@ -1,5 +1,5 @@
 import { Table, Button } from "@mantine/core";
-import { GetResultsNCSBE, results_parser, set_list_of_races, extremely_long_string } from './functions.ts';
+import { GetResultsNCSBE, results_parser, get_duplicates, set_list_of_races, extremely_long_string } from './functions.ts';
 import { useState, useEffect } from 'react';
 import races from './list_of_races.json';
 import endpoint from './url_protector.json';
@@ -59,9 +59,15 @@ export function OptionsTable() {
   //const options_dict = await set_list_of_races(input_url);
   type Option = { cnm: string; lid: string };
 
+  function filterAndSetTable(results: any){
+    const filtered = get_duplicates(results);
+    setOptionsDict(filtered);
+    return filtered;
+  }
+
   useEffect(() => {
     set_list_of_races(input_url)
-    .then(setOptionsDict)
+    .then(options_dict => filterAndSetTable(options_dict))
   }, [input_url]);
 
   const display_table = [];

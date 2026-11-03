@@ -34,12 +34,12 @@ export async function set_list_of_races(url: string) {
         new_dictionary.ogl = response[i][j].ogl;
         new_array.push(new_dictionary);}
     }
-    const filtered_array = get_duplicates(new_array);
-    return filtered_array;
-
+    //added the filtering to the components instead
+    //const filtered_array = get_duplicates(new_array);
+    return new_array;
 }
 
-function get_duplicates(input: any[]) {
+function eatDelete(input: any[]) {
   // The bifurcation between statewide and local elections accounts for the fact
   // that we want to grab some of the local elections from the statewide page
   // because they cross counties. But, we still want
@@ -49,28 +49,28 @@ function get_duplicates(input: any[]) {
   const deduped = new Array();
 
   //ogl is the level of the election 
-  const static_ogls = ["fed", "nch", "ncs", "jud"]
+  const static_ogls = ["CCL", "LOC"];
 
   
   for (var i = 0; i < input.length; i++) {
-     if (!(input[i].page == 0) && (election_options_statewide.includes(input[i].lid)) && !(static_ogls.includes(input[i].ogl)))  {
-      const x = deduped.findIndex((j) => j.lid === input[i].lid);
-      deduped[x].page = input[i].page;
-    }
-    else if ((input[i].page == 0) && !(election_options_statewide.includes(input[i].lid))) {
-      console.log("got to this step");
-      election_options_statewide.push(input[i].lid);
+    if ((input[i].page == 0) && !(election_options_statewide.includes(input[i].cnm))) {
+      election_options_statewide.push(input[i].cnm);
       deduped.push(input[i]);
     }
-    else if (!(input[i].page == 0) && !((election_options_statewide.includes(input[i].lid)) || (election_options_locals.includes(input[i].lid)))) {
-      election_options_locals.push(input[i].lid);
+    else if (!(input[i].page == 0) && (election_options_statewide.includes(input[i].cnm)) && (static_ogls.includes(input[i].ogl)))  {
+      const x = deduped.findIndex((j) => j.cnm === input[i].cnm);
+      deduped[x] = input[i];
+      election_options_locals.push(input[i].cnm);
+    }
+    else if (!(input[i].page == 0) && !((election_options_statewide.includes(input[i].cnm)) || (election_options_locals.includes(input[i].cnm)))) {
+      election_options_locals.push(input[i].cnm);
+      deduped.push(input[i]); }
+    else if (!((election_options_statewide.includes(input[i].cnm)) || (!(election_options_statewide.includes(input[i].cnm))))) {
+      election_options_locals.push(input[i].cnm);
       deduped.push(input[i]);
     }
     else { continue; }
   }
-  console.log(input.length);
-  console.log(election_options_statewide.length);
-  console.log(election_options_locals.length);
   return deduped;
 }
 
@@ -88,12 +88,18 @@ export async function GetResultsNCSBE(url: string) {
     };
   }
 
-function eatDelete(results_table: {[key:string]: string}[]) {
-//TODO: make a function which returns only the largest value (statewide) when duplicate entries
-  const proper = results_table.filter((entry) => 
-    (entry.cid == "0") || !((get_duplicates(results_table)).includes(entry.cnm)));
-// something here in the filtering is not working but I don't know what. The cid filter is fine
-  return proper;
+export function get_duplicates(input: any[]) {
+
+  const election_options = new Array();
+  const deduped = new Array();
+
+  for (var i = 0; i < input.length; i++) {
+    if (!(election_options.includes(input[i].cnm))) {
+      election_options.push(input[i].cnm);
+      deduped.push(input[i]);
+  } }
+
+  return deduped;
 }
 
 export function results_parser(results_table: {[key:string]: string}[]) {
@@ -120,10 +126,18 @@ export function results_parser(results_table: {[key:string]: string}[]) {
 
 export function extremely_long_string(page: String, races: any[]) {
   const filtered_by_locale = races.filter((entry) => (entry.page == page));
+  const race_list = get_duplicates(filtered_by_locale);
+  const local_codes = ["CCL", "LOC"];
   let full_code = new String();
-  for (let i = 0; i < filtered_by_locale.length; i++) {
-    let each_race = ` <div class="ta-results" data-page="${page}" data-lid="${filtered_by_locale[i].lid}"></div>\n\n`;
-    full_code = full_code + each_race;
+  for (let i = 0; i < race_list.length; i++) {
+    if (!(local_codes.includes(race_list[i].ogl))) {
+      let each_race = ` <div class="ta-results" data-page="0" data-lid="${race_list[i].lid}"></div>\n\n`;
+      full_code = full_code + each_race;
+    }
+    else {
+      let each_race = ` <div class="ta-results" data-page="${page}" data-lid="${race_list[i].lid}"></div>\n\n`;
+      full_code = full_code + each_race;
+    }
   }
   return full_code;
 }
