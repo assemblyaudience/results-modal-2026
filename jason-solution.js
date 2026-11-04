@@ -20,13 +20,25 @@
     return resultsPromise;
   }
 
+  function trunc_title(title) {
+    // Getting rid of "(VOTE FOR 1)" from the titles of the races
+    let i = title.indexOf("(V");
+
+    if (i>0) {
+      return title.substring(0, i);
+    }
+    else {return title;}
+
+  }
+
   function parseRaceRows(resultsTable) {
     return resultsTable.map((row) => ({
       candidate: row.bnm,
+      party: row.pty,
       votes: row.vct,
       percent: `${(parseFloat(row.pct) * 100).toFixed(2)}%`,
       lid: row.lid,
-      cnm: row.cnm,
+      cnm: trunc_title(row.cnm),
     }));
   }
 
@@ -44,6 +56,7 @@
         (row) => `
           <tr>
             <td>${escapeHtml(row.candidate)}</td>
+            <td>${escapeHtml(row.party)}</td>
             <td>${escapeHtml(row.votes)}</td>
             <td>${escapeHtml(row.percent)}</td>
           </tr>
@@ -53,18 +66,20 @@
     
 
     target.innerHTML = `
-      <h3>${title}</h3>
+      <h4>${title}</h4>
       <hr class="ta-results-rule" aria-hidden="true">
       <table class="ta-results-table">
         <thead>
           <tr>
             <th>Candidate</th>
+            <th>Party</th>
             <th>Votes</th>
             <th>Percent</th>
           </tr>
         </thead>
         <tbody>${tableRows}</tbody>
       </table>
+      <p id="back-to-top"><a href="#top">Back to top</a></p>
     `;
   }
 
@@ -106,7 +121,7 @@
         border-collapse: collapse;
         border-spacing: 0;
         background: #f5f5f5;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: "Graphik", "Helvetica", sans-serif;
       }
 
       .ta-results-table thead,
@@ -160,10 +175,16 @@
         margin: 0;
         padding: 0 10px 10px;
         color: #111;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: "Graphik", "Helvetica", sans-serif;
         font-size: 18px;
         line-height: 1.4;
       }
+
+        #back-to-top {
+          color: #3b4044;
+          font-size: 12px;
+          text-align: left;
+        }
 
       @media (max-width: 660px) {
         .ta-results-table {
@@ -178,6 +199,7 @@
           font-size: 20px;
         }
       }
+
     `;
 
     document.head.appendChild(style);
